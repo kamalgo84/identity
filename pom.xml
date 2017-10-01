@@ -1,0 +1,196 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>identity</groupId>
+  <artifactId>identity</artifactId>
+  <packaging>war</packaging>
+  <version>1.0</version>
+  <name>identity</name>
+  <repositories>
+		<repository>
+			<id>jboss</id>
+			<url>https://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+		</repository>	
+		<repository>
+			<id>mvn</id>
+			<url>https://mvnrepository.com/artifact/</url>
+		</repository>	
+	</repositories>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.source>1.6</maven.compiler.source>
+    <maven.compiler.target>1.6</maven.compiler.target>
+    <spring.version>4.3.2.RELEASE</spring.version>
+    <cxf.version>3.0.0</cxf.version>
+    <jackson.version>2.0.1</jackson.version>
+    <junit.version>4.12</junit.version>
+    <servlet.version>3.1.0</servlet.version>
+  </properties>
+  <dependencies>
+		 <dependency>
+		    <groupId>com.oracle</groupId>
+		    <artifactId>ojdbc14</artifactId>
+		    <version>10.2.0.2</version>
+		</dependency>
+		<dependency>
+		    <groupId>log4j</groupId>
+		    <artifactId>log4j</artifactId>
+		    <version>1.2.17</version>
+		</dependency>
+  		<dependency>
+		    <groupId>commons-dbcp</groupId>
+		    <artifactId>commons-dbcp</artifactId>
+		    <version>1.2.2</version>
+		</dependency>
+  		<dependency>
+		    <groupId>mysql</groupId>
+		    <artifactId>mysql-connector-java</artifactId>
+		    <version>5.0.2</version>
+		</dependency>
+	    <dependency>
+	      <groupId>org.jboss.spec</groupId>
+	      <artifactId>jboss-javaee-6.0</artifactId>
+	      <version>1.0.0.Final</version>
+	      <type>pom</type>
+	      <scope>provided</scope>
+	    </dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxrs</artifactId>
+			<version>2.2.1.GA</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+		    <groupId>org.jboss.resteasy</groupId>
+			    <artifactId>resteasy-spring</artifactId>
+			    <version>2.2.1.GA</version>
+			</dependency>
+		<dependency>
+		    <groupId>commons-lang</groupId>
+		    <artifactId>commons-lang</artifactId>
+		    <version>2.6</version>
+		</dependency>
+		<dependency>
+		    <groupId>commons-codec</groupId>
+		    <artifactId>commons-codec</artifactId>
+		    <version>1.10</version>
+		</dependency>
+		
+		
+		<!--Servlet-Api -->
+<!--         <dependency> -->
+<!--             <groupId>javax.servlet</groupId> -->
+<!--             <artifactId>javax.servlet-api</artifactId> -->
+<!--             <version>${servlet.version}</version> -->
+<!--         </dependency> -->
+        <!-- Spring Framework -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-beans</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-core</artifactId>
+		    <version>2.7.1</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>2.6.6</version>
+		</dependency>
+		
+		
+        <!-- Servlet API -->
+<!--         <dependency> -->
+<!--             <groupId>javax.servlet</groupId> -->
+<!--             <artifactId>javax.servlet-api</artifactId> -->
+<!--             <version>${servlet.version}</version> -->
+<!--         </dependency> -->
+		
+		
+<!--     	<dependency> -->
+<!-- 	      <groupId>org.springframework</groupId> -->
+<!-- 	      <artifactId>spring-web</artifactId> -->
+<!-- 	      <version>${spring.version}</version> -->
+<!-- 	  </dependency> -->
+<!-- 	  <dependency> -->
+<!-- 	      <groupId>org.apache.cxf</groupId> -->
+<!-- 	      <artifactId>cxf-rt-frontend-jaxrs</artifactId> -->
+<!-- 	      <version>${cxf.version}</version> -->
+<!-- 	  </dependency> -->
+<!-- 	  <dependency> -->
+<!-- 	      <groupId>org.apache.cxf</groupId> -->
+<!-- 	      <artifactId>cxf-rt-ws-policy</artifactId> -->
+<!-- 	      <version>${cxf.version}</version> -->
+<!-- 	  </dependency> -->
+<!-- 	  <dependency> -->
+<!-- 	      <groupId>org.apache.cxf</groupId> -->
+<!-- 	      <artifactId>cxf-rt-wsdl</artifactId> -->
+<!-- 	      <version>3.0.0</version> -->
+<!-- 	  </dependency> -->
+<!-- 	  <dependency> -->
+<!-- 	      <groupId>org.codehaus.jackson</groupId> -->
+<!-- 	      <artifactId>jackson-jaxrs</artifactId> -->
+<!-- 	      <version>1.6.3</version> -->
+<!-- 	  </dependency> -->
+<!-- 	  <dependency> -->
+<!-- 	      <groupId>org.codehaus.jackson</groupId> -->
+<!-- 	      <artifactId>jackson-mapper-asl</artifactId> -->
+<!-- 	      <version>1.6.3</version> -->
+<!-- 	  </dependency> -->
+<!-- 	  <dependency> -->
+<!-- 	      <groupId>com.fasterxml.jackson.jaxrs</groupId> -->
+<!-- 	      <artifactId>jackson-jaxrs-json-provider</artifactId> -->
+<!-- 	      <version>${jackson.version}</version> -->
+<!-- 	  </dependency> -->
+  </dependencies>
+  <profiles>
+    <profile>
+     <!-- When built in OpenShift the 'openshift' profile will be used when invoking mvn. -->
+     <!-- Use this profile for any OpenShift specific customization your app will need. -->
+     <!-- By default that is to put the resulting archive into the 'deployments' folder. -->
+     <!-- http://maven.apache.org/guides/mini/guide-building-for-different-environments.html -->
+     <id>openshift</id>
+     <build>
+        <finalName>identity</finalName>
+        <plugins>
+          <plugin>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>2.1.1</version>
+            <configuration>
+              <outputDirectory>deployments</outputDirectory>
+              <warName>ROOT</warName>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>

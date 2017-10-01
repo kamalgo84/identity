@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" 
+       xmlns:context="http://www.springframework.org/schema/context" 
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xmlns:mvc = "http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation=" http://www.springframework.org/schema/beans  
+       						http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+       						http://www.springframework.org/schema/context  
+       						http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       						http://www.springframework.org/schema/mvc
+   							http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+       						
+<!--     <import resource="classpath:jbr/config/user-beans.xml" /> -->
+    <context:component-scan base-package="com.identity.front" />
+    
+<!--     <context:annotation-config /> -->
+    
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+<!--         <property name="prefix" value="/jsp/" /> -->
+<!--         <property name="suffix" value=".jsp" /> -->
+        <property name="prefix" value="/" />
+        <property name="suffix" value="" />
+    </bean>
+    
+<!--     <mvc:resources mapping = "/**" location = "/" /> -->
+    
+     <mvc:annotation-driven/>
+     
+     
+	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+		<property name="urlMap">
+	         <map>
+	              <entry key="/**" value="myResourceHandler" />
+	         </map>
+	     </property>
+	     <property name="order" value="100000" />       
+	</bean>
+	
+	<bean id="myResourceHandler" name="myResourceHandler"
+	      class="org.springframework.web.servlet.resource.ResourceHttpRequestHandler">
+	      <property name="locations" value="/" />
+	      <property name="supportedMethods">
+	         <list>
+	            <value>GET</value>
+	            <value>HEAD</value>
+	            <value>POST</value>
+	         </list>
+	     </property>
+	     <!-- cacheSeconds: maybe you should set it to zero because of the posts-->
+	</bean>
+	
+	<bean id="map" class="java.util.HashMap" scope="prototype" >
+	    <constructor-arg>
+	        <map key-type="java.lang.String" value-type="java.lang.String">
+<!-- 	            lokoyo -->
+	            <entry key="yekill" value="8ecf2bff20db90ad52fa5ad2297e0283" />
+<!-- 	            identitykamal -->
+	            <entry key="kemeludo@gmail.com" value="0fd199fd1de5befbe095d2178a7dad7c" />
+	        </map>
+	    </constructor-arg>
+	</bean>
+	
+	<bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+<!-- 		<property name="mediaTypes"> -->
+<!-- 			<map> -->
+<!-- 				<entry key="xml" value="application/xml" /> -->
+<!-- 				<entry key="json" value="application/json" /> -->
+<!-- 				<entry key="jsonp" value="application/javascript" /> -->
+<!-- 			</map> -->
+<!-- 		</property> -->
+		<property name="defaultViews">
+			<list>
+				<bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"></bean>
+			</list>
+		</property>
+	</bean>
+    
+</beans>

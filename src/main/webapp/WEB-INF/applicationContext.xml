@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xmlns:cxf="http://cxf.apache.org/core"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+                        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+                        http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
+                        http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd">
+ 
+    <context:component-scan base-package="com.identity" />
+    
+    <!-- Import basic SpringMVC Resteasy integration -->
+    <import resource="spring-mvc-servlet.xml"/>
+    
+
+    
+    <bean id="map" class="java.util.HashMap" scope="prototype" >
+	    <constructor-arg>
+	        <map key-type="java.lang.String" value-type="java.lang.String">
+	            <entry key="yekill" value="8ecf2bff20db90ad52fa5ad2297e0283" />
+	            <entry key="kemeludo@gmail.com" value="0fd199fd1de5befbe095d2178a7dad7c" />
+	        </map>
+	    </constructor-arg>
+	</bean>
+ 
+<!--     <jaxrs:server id="identityRestServer" address="/"> -->
+<!--         <jaxrs:serviceBeans> -->
+<!--             <ref bean="identityServices"/> -->
+<!--         </jaxrs:serviceBeans> -->
+<!--         <jaxrs:extensionMappings> -->
+<!--             <entry key="json" value="application/json"/> -->
+<!--         </jaxrs:extensionMappings> -->
+<!--         <jaxrs:features> -->
+<!--             <cxf:logging/> -->
+<!--         </jaxrs:features> -->
+<!--         <jaxrs:providers> -->
+<!--         	<bean class="com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider" /> -->
+<!-- 			<ref bean="jsonProvider" /> -->
+<!--         </jaxrs:providers> -->
+<!--     </jaxrs:server> -->
+    
+<!--     <bean id="jsonProvider" class="org.codehaus.jackson.jaxrs.JacksonJsonProvider"> -->
+<!-- 			<property name="mapper" ref="jacksonMapper" /> -->
+<!-- 	</bean>  -->
+<!-- 	<bean id="jacksonMapper" class="org.codehaus.jackson.map.ObjectMapper"/> -->
+	
+	<bean name="identityDAO" id="identityDAO" class="com.identity.services.dao.IdentityDAO">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+	
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+    
+<!-- 	classpath*:/META-INF/spring/*.properties -->
+	<context:property-placeholder location="classpath*:/identity.properties"/>
+	
+	<bean id="query1" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="${query1}"/>
+    </bean>
+    <bean id="query2" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="${query2}"/>
+    </bean>
+    <bean id="query3" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="${query3}"/>
+    </bean>
+    <bean id="query4" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="${query4}"/>
+    </bean>
+    <bean id="query5" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="${query5}"/>
+    </bean>
+    <bean id="query6" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="${query6}"/>
+    </bean>
+    <bean id="query7" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="${query7}"/>
+    </bean>
+    <bean id="query8" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="${query8}"/>
+    </bean>
+    <bean id="query9" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="${query9}"/>
+    </bean>
+    <bean id="query10" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="${query10}"/>
+    </bean>
+    <bean id="query11" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="${query11}"/>
+    </bean>
+    <bean id="query12" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="${query12}"/>
+    </bean>
+    <bean id="query13" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="${query13}"/>
+    </bean>
+    <bean id="query14" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="${query14}"/>
+    </bean>
+    <bean id="entorno" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="${entorno}"/>
+    </bean>
+    
+
+ 
+</beans>

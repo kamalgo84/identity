@@ -1,0 +1,6 @@
+/target/
+/.settings/
+.wtpmodules
+.classpath
+.project
+.openshift
