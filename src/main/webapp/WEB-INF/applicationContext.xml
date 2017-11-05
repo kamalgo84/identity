@@ -104,7 +104,7 @@
     	<constructor-arg type="java.lang.String" value="${query14}"/>
     </bean>
     <bean id="entorno" class="java.lang.String">
-    	<constructor-arg type="java.lang.String" value="${entorno}"/>
+    	<constructor-arg type="java.lang.String" value="identity"/>
     </bean>
     
 
