@@ -25,8 +25,45 @@
     <jackson.version>2.0.1</jackson.version>
     <junit.version>4.12</junit.version>
     <servlet.version>3.1.0</servlet.version>
+    <resteasy.version>3.0.9.Final</resteasy.version>
   </properties>
   <dependencies>
+  
+  
+  
+<!--   Dependencias para RESTEasy fuera de JBoss -->
+		  <!-- Basic support -->
+		<dependency>
+		    <groupId>org.jboss.resteasy</groupId>
+		    <artifactId>resteasy-jaxrs</artifactId>
+		    <version>${resteasy.version}</version>
+		</dependency>
+		<!-- Servlet pluggability support -->
+		<dependency>
+		    <groupId>org.jboss.resteasy</groupId>
+		    <artifactId>resteasy-servlet-initializer</artifactId>
+		    <version>${resteasy.version}</version>
+		</dependency>
+		<!-- JSON/POJO support -->
+		<dependency>
+		    <groupId>org.jboss.resteasy</groupId>
+		    <artifactId>resteasy-jackson2-provider</artifactId>
+		    <version>${resteasy.version}</version>
+		</dependency>
+		<!-- REST Client support -->
+		<dependency>
+		    <groupId>org.jboss.resteasy</groupId>
+		    <artifactId>resteasy-client</artifactId>
+		    <version>${resteasy.version}</version>
+		</dependency>
+  
+  
+  
+  
+  
+  
+  
+  
 <!-- 		 <dependency> -->
 <!-- 		    <groupId>com.oracle</groupId> -->
 <!-- 		    <artifactId>ojdbc14</artifactId> -->
