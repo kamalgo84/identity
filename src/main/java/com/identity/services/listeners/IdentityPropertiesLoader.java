@@ -25,7 +25,7 @@ public class IdentityPropertiesLoader implements ServletContextListener
       }
       catch (final IOException e)
       {
-          // can't get resource
+          e.printStackTrace();
       }
       for (String prop : propsFromFile.stringPropertyNames())
       {
