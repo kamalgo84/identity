@@ -53,7 +53,8 @@
 		<filter-class>com.identity.services.filters.MainFilter</filter-class>
 		<init-param>
 			<param-name>entorno</param-name>
-			<param-value>${entorno}</param-value>
+<!-- 			<param-value>${entorno}</param-value> -->
+			<param-value></param-value>
 		</init-param>
 	</filter>
 
