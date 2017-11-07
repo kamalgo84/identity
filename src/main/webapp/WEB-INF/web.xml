@@ -52,20 +52,20 @@
 
 
     
-	<filter>
-		<filter-name>MainFilter</filter-name>
-		<filter-class>com.identity.services.filters.MainFilter</filter-class>
-		<init-param>
-			<param-name>entorno</param-name>
-			<param-value>${entorno}</param-value>
-		</init-param>
-	</filter>
+<!-- 	<filter> -->
+<!-- 		<filter-name>MainFilter</filter-name> -->
+<!-- 		<filter-class>com.identity.services.filters.MainFilter</filter-class> -->
+<!-- 		<init-param> -->
+<!-- 			<param-name>entorno</param-name> -->
+<!-- 			<param-value>${entorno}</param-value> -->
+<!-- 		</init-param> -->
+<!-- 	</filter> -->
 
-	<filter-mapping>
-		<filter-name>MainFilter</filter-name>
-		<servlet-name>spring-mvc</servlet-name>
-		 <url-pattern>/</url-pattern>
-	</filter-mapping>
+<!-- 	<filter-mapping> -->
+<!-- 		<filter-name>MainFilter</filter-name> -->
+<!-- 		<servlet-name>spring-mvc</servlet-name> -->
+<!-- 		 <url-pattern>/</url-pattern> -->
+<!-- 	</filter-mapping> -->
 
 
  
