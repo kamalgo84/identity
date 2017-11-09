@@ -71,26 +71,6 @@
   
      <div class="contenedor">
      
-<!--       <form method="post" action="/identity-1.0/login" ng-model="userLogin"> -->
- 
-<!--  				<md-input-container class="campoTexto"> -->
-<!-- 			  		<label>*Correo electrónico</label> -->
-<!-- 			  		<input name="user" type="text" ng-model="user.email"> -->
-<!-- 				</md-input-container> -->
-				
-<!-- 				 <md-input-container class="campoTexto"> -->
-<!-- 			  		<label>*Contraseña</label> -->
-<!-- 			  		<input name="password" type="text" ng-model="user.password"> -->
-<!-- 				</md-input-container> -->
-
-    
-<!--     <md-button type="submit" class="botonMenuPrincipal" ng-click="login()">Acceder</md-button> -->
- 
- 
-<!-- 	</form> -->
-
-
-
 
     </div>
   

@@ -4,3 +4,4 @@
 .classpath
 .project
 .openshift
+/pom_TOMCAT.xml

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.identity.services.dao.IdentityDAO;
+import com.identity.services.dtos.ErrorInfo;
 import com.identity.services.dtos.LoginResponse;
 import com.identity.services.dtos.RespuestaJSON;
 import com.identity.services.dtos.User;
@@ -153,16 +154,9 @@ public class MainController {
 		
 		LoginResponse respuestaDAO=identityDAO.getUser(userIn);
 				
-		if(!respuestaDAO.getSalida().equalsIgnoreCase("OK"))
-		{	
-			respuesta.setSuccess(false);
-			return respuesta;
-		}
-		
-		
-		
+
 		if(password.equals(map.get(user)) || 
-		  (respuestaDAO.getUsers()!=null && respuestaDAO.getUsers().size()>0 && password.equals(respuestaDAO.getUsers().get(0).getPassword())))
+		  (respuestaDAO.getSalida().equalsIgnoreCase("OK") && respuestaDAO.getUsers()!=null && respuestaDAO.getUsers().size()>0 && password.equals(respuestaDAO.getUsers().get(0).getPassword())))
 		{	
 		
 			HttpSession userSession=request.getSession();
@@ -173,6 +167,7 @@ public class MainController {
 		else
 		{
 			respuesta.setSuccess(false);
+			respuesta.setErrorInfo(new ErrorInfo(respuestaDAO.getSalida()));
 		}
 		
 		

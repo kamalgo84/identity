@@ -39,6 +39,21 @@ public class ErrorInfo {
 	public ErrorInfo() {
 		super();
 	}
+	
+	/**
+	 * Constructor de la clase con parámetros
+	 * @param errorCode
+	 * @param errorTitle
+	 * @param errorDescription
+	 * @param errorKeyTitle
+	 * @param errorKeyDescription
+	 * @param debugMessage
+	 * @param debugTrace
+	 */
+	public ErrorInfo(String errorDescription) {
+		super();
+		this.errorDescription = errorDescription;
+	}
 	/**
 	 * Constructor de la clase con parámetros
 	 * @param errorCode

@@ -12,10 +12,7 @@
 var mainCtrlCallBack=function($http, $scope, $mdDialog, $window)
 {
 	
-	if($window.location.href.includes("localhost"))
-		$scope.contextRoot="/identity-1.0";
-	else
-		$scope.contextRoot="";
+	$scope.contextRoot="";
 	
 	function loginController($scope, $mdDialog, $http, $window, contextRoot) 
 	{	
