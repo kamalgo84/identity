@@ -86,6 +86,7 @@ public class IdentityDAO {
 
 	        preparedStatement.setString(1,user.getCodigo_usuario());
 	        preparedStatement.setString(2,user.getPassword());
+	        preparedStatement.setString(3,user.getType());
             preparedStatement.executeUpdate();
             
             preparedStatement.close();
