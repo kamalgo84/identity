@@ -206,6 +206,7 @@ public class MainController {
 		}
 		else
 		{
+			respuesta.setErrorInfo(new ErrorInfo(respuestaDAO.getSalida()));
 			respuesta.setSuccess(false);
 		}
 		

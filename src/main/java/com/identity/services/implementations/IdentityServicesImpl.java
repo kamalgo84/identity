@@ -168,19 +168,24 @@ public class IdentityServicesImpl
 	@Consumes("application/json")
 	@Produces("application/json")
 	public CardResponse getCard(CardRequest peticion) {
+		
+		LOG.info("*********LOG********** Entrada servicio getCard con entrada: "+peticion);
+		
 
 		CardResponse respuesta=new CardResponse();
 		
 		if(peticion.getId().equalsIgnoreCase("0123456789"))
 		{
 			 
-			 respuesta.setImage("https://identity-kwebgl.rhcloud.com/images/jbosscorp_logo.png");
+			 respuesta.setImage("http://identity-identity.193b.starter-ca-central-1.openshiftapps.com/images/jbosscorp_logo.png");
 			 respuesta.setId("0123456789");
 		}
 		else
 		{
 			 respuesta=null;
 		}
+		
+		LOG.info("*********LOG********** Salida servicio getCard con entrada: "+respuesta);
 			 
 		return respuesta;
 
