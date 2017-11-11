@@ -18,10 +18,12 @@ import java.util.Date;
 import javax.annotation.Resource;
 import javax.imageio.ImageIO;
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 
 import org.apache.commons.codec.binary.StringUtils;
@@ -42,6 +44,7 @@ import com.identity.services.dtos.LoginResponse;
 import com.identity.services.dtos.User;
 import com.identity.services.dtos.Customer;
 import com.identity.services.dtos.UsersResponse;
+import com.identity.utils.Constants;
 import com.identity.utils.Tools;
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 
@@ -75,7 +78,7 @@ public class IdentityServicesImpl
     @Path("/addUser")
 	@Consumes("application/json")
 	@Produces("application/json")
-    public UsersResponse addUser(@Context ServletContext servletContext,User user)
+    public LoginResponse addUser(@Context ServletContext servletContext,User user)
 	{
 		LOG.info("*********LOG********** Entrada servicio addUser con entrada: "+user);
 		
@@ -91,49 +94,76 @@ public class IdentityServicesImpl
     @Path("/addCustomer")
 	@Consumes("application/json")
 	@Produces("application/json")
-    public UsersResponse addCustomer(@Context ServletContext servletContext,Customer user)
+    public UsersResponse addCustomer(@Context HttpServletRequest request, @Context ServletContext servletContext,Customer user)
 	{
 		LOG.info("*********LOG********** Entrada servicio addCustomer con entrada: "+user);
+		
+		user.setCodigo_usuario(null);
 		
 		ApplicationContext ctx =
                 WebApplicationContextUtils.getWebApplicationContext(servletContext);
 		IdentityDAO dao= ctx.getBean("identityDAO",IdentityDAO.class);
 	
+		
+		
+		User userInfo=(User)request.getSession().getAttribute(Constants.USER_INFO);
+		
+		if(userInfo!=null && 
+		   userInfo.getCodigo_usuario()!=null && 
+		   !userInfo.getCodigo_usuario().isEmpty())
+			user.setCodigo_usuario(userInfo.getCodigo_usuario());
+		else
+//			throw new WebApplicationException();
+			//TODO Metemos usuario de pruebas para hacer tests de los serviocios, esto deberia ser una excepcion
+			user.setCodigo_usuario(Constants.MOCK_CUSTOMER);
+		
 		return dao.addCustomer(user);
 	
 	}
 
-	@POST
-    @Path("/getUser")
-	@Consumes("application/json")
-	@Produces("application/json")
-    public LoginResponse getUser(@Context ServletContext servletContext,User user)
-	{
-		LOG.info("*********LOG********** Entrada servicio getUser con entrada: "+user);
-		
-		ApplicationContext ctx =
-                WebApplicationContextUtils.getWebApplicationContext(servletContext);
-		IdentityDAO dao= ctx.getBean("identityDAO",IdentityDAO.class);
-	
-
-	    return dao.getUser(user);
-        
-	}
+//	@POST
+//    @Path("/getUser")
+//	@Consumes("application/json")
+//	@Produces("application/json")
+//    public LoginResponse getUser(@Context ServletContext servletContext,User user)
+//	{
+//		LOG.info("*********LOG********** Entrada servicio getUser con entrada: "+user);
+//		
+//		ApplicationContext ctx =
+//                WebApplicationContextUtils.getWebApplicationContext(servletContext);
+//		IdentityDAO dao= ctx.getBean("identityDAO",IdentityDAO.class);
+//	
+//
+//	    return dao.getUser(user);
+//        
+//	}
 	
 	@POST
     @Path("/getUsers")
 	@Consumes("application/json")
 	@Produces("application/json")
-    public UsersResponse getUsers(@Context ServletContext servletContext)
+    public UsersResponse getUsers(@Context HttpServletRequest request,@Context ServletContext servletContext)
 	{
 		LOG.info("*********LOG********** Entrada servicio getUsers sin argumentos");
+		
+		User userInfo=(User)request.getSession().getAttribute(Constants.USER_INFO);
+		
+		if(userInfo==null || 
+		   userInfo.getCodigo_usuario()==null || 
+		   !userInfo.getCodigo_usuario().isEmpty())
+		{
+//			throw new WebApplicationException();
+			//TODO Metemos usuario de pruebas para hacer tests de los serviocios, esto deberia ser una excepcion
+			userInfo=new User();
+			userInfo.setCodigo_usuario(Constants.MOCK_CUSTOMER);
+		}
 		
 		ApplicationContext ctx =
                 WebApplicationContextUtils.getWebApplicationContext(servletContext);
 		IdentityDAO dao= ctx.getBean("identityDAO",IdentityDAO.class);
 	
 
-	    return dao.getUsers();
+	    return dao.getUsers(userInfo);
 		
         
 	}

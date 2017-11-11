@@ -13,8 +13,12 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.WebApplicationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import com.identity.services.dtos.User;
+import com.identity.utils.Constants;
 
 public class MainFilter implements Filter {
 
@@ -53,7 +57,8 @@ public class MainFilter implements Filter {
 			
 			HttpSession userSession=requestMod.getSession();
 			
-			if(userSession.getAttribute("Autenticado")==null || userSession.getAttribute("Autenticado")==Boolean.FALSE)
+			if(userSession.getAttribute(Constants.AUTHENTICATED)==null || 
+			   userSession.getAttribute(Constants.AUTHENTICATED)==Boolean.FALSE)
 			{
 //				requestMod.getSession().setAttribute("requestedPage", requestMod.getRequestURL().toString());
 //	            RequestDispatcher noPermited = request.getRequestDispatcher("/forbidden.html");
@@ -63,8 +68,35 @@ public class MainFilter implements Filter {
 			}
 			else
 			{
-				chain.doFilter(request, response);
+				
+				if(requestMod.getRequestURI().equalsIgnoreCase("/identity_app/indexCompany.html"))
+				{
+					User userInfo=(User)userSession.getAttribute(Constants.USER_INFO);
+					
+					if(userInfo!=null && userInfo.getType()!=null && !userInfo.getType().isEmpty() && userInfo.getType().equalsIgnoreCase(Constants.USER_CUSTOMER))
+						responseMod.sendRedirect("/identity_app/indexCustomer.html");
+					else if(userInfo.getType().equalsIgnoreCase(Constants.USER_COMPANY))
+						chain.doFilter(request, response);
+					else
+						throw new WebApplicationException();					
+				}
+				
+				if(requestMod.getRequestURI().equalsIgnoreCase("/identity_app/indexCustomer.html"))
+				{
+					User userInfo=(User)userSession.getAttribute(Constants.USER_INFO);
+					
+					if(userInfo!=null && userInfo.getType()!=null && !userInfo.getType().isEmpty() && userInfo.getType().equalsIgnoreCase(Constants.USER_CUSTOMER))
+						chain.doFilter(request, response);
+					else if(userInfo.getType().equalsIgnoreCase(Constants.USER_COMPANY))
+						responseMod.sendRedirect("/identity_app/indexCompany.html");
+					else
+						throw new WebApplicationException();
+				}
+				else
+					chain.doFilter(request, response);
 			}
+			
+			
 			
 			
 		}

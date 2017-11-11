@@ -5,6 +5,7 @@ import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.ws.rs.WebApplicationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import com.identity.services.dtos.LoginResponse;
 import com.identity.services.dtos.RespuestaJSON;
 import com.identity.services.dtos.User;
 import com.identity.services.dtos.UsersResponse;
+import com.identity.utils.Constants;
 import com.identity.utils.Tools;
 
 @Controller
@@ -76,7 +78,7 @@ public class MainController {
 		{	
 		
 			HttpSession userSession=request.getSession();
-			userSession.setAttribute("Autenticado", Boolean.TRUE);
+			userSession.setAttribute(Constants.AUTHENTICATED, Boolean.TRUE);
 		    
 			return new ModelAndView("redirect:/identity_app/home");
 		}
@@ -118,8 +120,8 @@ public class MainController {
 	    //Establecer cookie en plan manual
 	   // response.addHeader("set-cookie", "Cabecera=loko");
 		
-		request.getSession().setAttribute("Autenticado", Boolean.FALSE);
-		
+		request.getSession().setAttribute(Constants.AUTHENTICATED, Boolean.FALSE);
+		request.getSession().setAttribute(Constants.USER_INFO, null);
 		request.getSession().invalidate();
 		
 		RespuestaJSON respuesta=new RespuestaJSON();
@@ -156,11 +158,17 @@ public class MainController {
 				
 
 		if(password.equals(map.get(user)) || 
-		  (respuestaDAO.getSalida().equalsIgnoreCase("OK") && respuestaDAO.getUsers()!=null && respuestaDAO.getUsers().size()>0 && password.equals(respuestaDAO.getUsers().get(0).getPassword())))
+		  (respuestaDAO.getSalida().equalsIgnoreCase("OK") && 
+		   respuestaDAO.getUsers()!=null && 
+		   respuestaDAO.getUsers().size()>0 && 
+		   password.equals(respuestaDAO.getUsers().get(0).getPassword())))
 		{	
 		
 			HttpSession userSession=request.getSession();
-			userSession.setAttribute("Autenticado", Boolean.TRUE);
+			userSession.setAttribute(Constants.AUTHENTICATED, Boolean.TRUE);
+			
+			respuestaDAO.getUsers().get(0).setPassword("****");
+			userSession.setAttribute(Constants.USER_INFO, respuestaDAO.getUsers().get(0));
 		    
 			respuesta.setSuccess(true);
 		}
@@ -190,9 +198,9 @@ public class MainController {
 		User userIn=new User();
 		userIn.setCodigo_usuario(user);
 		userIn.setPassword(password);
-		userIn.setType((isCompany) ? "E" : "C");
+		userIn.setType((isCompany) ? Constants.USER_COMPANY : Constants.USER_CUSTOMER);
 		
-		UsersResponse respuestaDAO=identityDAO.addUser(userIn);
+		LoginResponse respuestaDAO=identityDAO.addUser(userIn);
 		
 		
 		
@@ -200,7 +208,8 @@ public class MainController {
 		{	
 		
 			HttpSession userSession=request.getSession();
-			userSession.setAttribute("Autenticado", Boolean.TRUE);
+			userSession.setAttribute(Constants.AUTHENTICATED, Boolean.TRUE);
+			userSession.setAttribute(Constants.USER_INFO, respuestaDAO.getUsers().get(0));
 		    
 			respuesta.setSuccess(true);
 		}
@@ -215,13 +224,48 @@ public class MainController {
 		
 	}
 	
+//	@RequestMapping(value = {"/identity_app/indexCompany.html","/identity_app/indexCustomer.html"}, method = RequestMethod.GET)
+//	public String indexCompany(HttpServletRequest request, HttpServletResponse response
+//	//,@ModelAttribute("login") Login login
+//	) 
+//	{
+//		
+//		HttpSession userSession=request.getSession();
+//		User userInfo=(User)userSession.getAttribute(Constants.USER_INFO);
+//		
+//		String maV="";
+//		
+//		if(userInfo!=null && userInfo.getType()!=null && !userInfo.getType().isEmpty() && userInfo.getType().equalsIgnoreCase(Constants.USER_CUSTOMER))
+//			maV="/identity_app/indexCustomer.html";
+//		else if(userInfo.getType().equalsIgnoreCase(Constants.USER_COMPANY))
+//			maV="/identity_app/indexCompany.html";
+//		else
+//			throw new WebApplicationException();
+//		
+//		 ModelAndView mav=new ModelAndView(maV);
+//		 return maV;
+//	}
+	
 	
 	@RequestMapping(value = "/identity_app/home", method = RequestMethod.GET)
 	public ModelAndView loginProcess(HttpServletRequest request, HttpServletResponse response
 	//,@ModelAttribute("login") Login login
 	) 
 	{
-		 ModelAndView mav=new ModelAndView("/identity_app/index.html");
+		
+		HttpSession userSession=request.getSession();
+		User userInfo=(User)userSession.getAttribute(Constants.USER_INFO);
+		
+		String maV="";
+		
+		if(userInfo!=null && userInfo.getType()!=null && !userInfo.getType().isEmpty() && userInfo.getType().equalsIgnoreCase(Constants.USER_CUSTOMER))
+			maV="/identity_app/indexCustomer.html";
+		else if(userInfo.getType().equalsIgnoreCase(Constants.USER_COMPANY))
+			maV="/identity_app/indexCompany.html";
+		else
+			throw new WebApplicationException();
+		
+		 ModelAndView mav=new ModelAndView(maV);
 		 return mav;
 	}
   

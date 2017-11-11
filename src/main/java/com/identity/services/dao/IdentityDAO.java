@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.core.Context;
@@ -21,6 +22,7 @@ import com.identity.services.dtos.LoginResponse;
 import com.identity.services.dtos.User;
 import com.identity.services.dtos.UsersResponse;
 import com.identity.services.implementations.IdentityServicesImpl;
+import com.identity.utils.Constants;
 import com.identity.utils.Tools;
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
 
@@ -59,17 +61,17 @@ public class IdentityDAO {
 
 	public void setDataSource(BasicDataSource dataSource) {this.dataSource = dataSource;}
 
-	public UsersResponse addUser(User user)
+	public LoginResponse addUser(User user)
 	{
 	
 		LOG.info("*********LOG********** Entrada servicio addUser con entrada: "+user);
 	
 	    PreparedStatement preparedStatement = null;
 	    PreparedStatement preparedStatement2 = null;
-		UsersResponse usersResponse=new UsersResponse();
+	    LoginResponse usersResponse=new LoginResponse();
 		
 		if(Tools.isBlank(user.getCodigo_usuario())||Tools.isBlank(user.getPassword())||Tools.isBlank(user.getType())||
-				(!user.getType().equalsIgnoreCase("C") && !user.getType().equalsIgnoreCase("E")))
+				(!user.getType().equalsIgnoreCase(Constants.USER_CUSTOMER) && !user.getType().equalsIgnoreCase(Constants.USER_COMPANY)))
 		{
 			usersResponse.setSalida("KO - Parametros obligatorios no informados");
 			return usersResponse;
@@ -91,7 +93,7 @@ public class IdentityDAO {
             
             preparedStatement.close();
             
-            if(user.getType().equalsIgnoreCase("C"))
+            if(user.getType().equalsIgnoreCase(Constants.USER_CUSTOMER))
             {
             
             	preparedStatement2=dataSource.getConnection()
@@ -109,6 +111,11 @@ public class IdentityDAO {
             }
             
             preparedStatement2.close();
+
+            user.setPassword("******");
+            List<User> usuariosSalida=new ArrayList<User>();
+            usuariosSalida.add(user);
+            usersResponse.setUsers(usuariosSalida);
             usersResponse.setSalida("OK");
             return usersResponse;
 	            
@@ -118,11 +125,16 @@ public class IdentityDAO {
 			usersResponse.setSalida("ERROR: Usuario existente");
 			return usersResponse;
 		}
-		catch (SQLException e) {
-	
-				usersResponse.setSalida("Error SQL: "+e.getErrorCode()+"*********"+e.getMessage()+"*********"+e);
-				return usersResponse;
-			}
+		catch (SQLException e) 
+		{
+			usersResponse.setSalida("Error SQL: "+e.getErrorCode()+"*********"+e.getMessage()+"*********"+e);
+			return usersResponse;
+		}
+		catch (Exception ex) {
+
+			usersResponse.setSalida("Error SQL: "+ex.getMessage()+"*********"+ex);
+			return usersResponse;
+		}
 	
 	}
 	
@@ -156,6 +168,7 @@ public class IdentityDAO {
             	
             	client.setCodigo_usuario(resultSet.getString("CODIGO_USUARIO"));
             	client.setPassword(resultSet.getString("PASSWORD"));
+            	client.setType(resultSet.getString("TIPO"));
             	            	
             	users.add(client);
             	
@@ -180,11 +193,16 @@ public class IdentityDAO {
 			usersResponse.setSalida("Error SQL: "+e.getErrorCode()+"*********"+e.getMessage()+"*********"+e);
 			return usersResponse;
 		}
+        catch (Exception ex) {
+
+			usersResponse.setSalida("Error SQL: "+ex.getMessage()+"*********"+ex);
+			return usersResponse;
+		}
 
         
 	}
 	
-	public UsersResponse getUsers()
+	public UsersResponse getUsers(User user)
 	{
 		LOG.info("*********LOG********** Entrada servicio getUsers sin argumentos");
 	    PreparedStatement preparedStatement = null;
@@ -195,6 +213,8 @@ public class IdentityDAO {
         {
 			preparedStatement = dataSource.getConnection()
                     .prepareStatement(query7);
+			preparedStatement.setString(1,user.getCodigo_usuario());
+			
             resultSet = preparedStatement.executeQuery();
             
             
@@ -392,38 +412,87 @@ public class IdentityDAO {
 	{
 		LOG.info("*********LOG********** Entrada servicio addCustomer con entrada: "+user);
 		
-		 PreparedStatement preparedStatement = null;
+		PreparedStatement preparedStatement = null;
 		UsersResponse usersResponse=new UsersResponse();
+		
+		if(user==null)
+		{
+			usersResponse.setSalida("KO - PArámetros Invalidos");
+			return usersResponse;
+		}
+		
+		if(user.getSexo()!=null && !user.getSexo().isEmpty() &&
+		   !user.getSexo().equals(Constants.SEXO_HOMBRE) &&
+		   !user.getSexo().equals(Constants.SEXO_MUJER))
+		{
+			usersResponse.setSalida("KO - PArámetros Invalidos");
+			return usersResponse;
+		}
+		
+		
+		String query="UPDATE CLIENTE SET ";
+		
+		if(user.getNombre_1()!=null)query+="NOMBRE_1=?,";
+		if(user.getNombre_2()!=null)query+="NOMBRE_2=?,";
+		if(user.getApellidos_1()!=null)query+="APELLIDOS_1=?,";
+		if(user.getApellidos_2()!=null)query+="APELLIDOS_2=?,";
+		if(user.getFecha_nacimiento()!=null)query+="FECHA_NACIMIENTO=?,";
+		if(user.getEdad()!=null)query+="EDAD=?,";
+		if(user.getSexo()!=null)query+="SEXO=?,";
+		if(user.getLugar_de_nacimiento()!=null)query+="LUGAR_DE_NACIMIENTO=?,";
+		if(user.getProvincia_nacimiento()!=null)query+="PROVINCIA_NACIMIENTO=?,";
+		if(user.getDireccion_habitual()!=null)query+="DIRECCION_HABITUAL=?,";
+		if(user.getTipo_de_via()!=null)query+="TIPO_DE_VIA=?,";
+		if(user.getNombre_de_la_calle()!=null)query+="NOMBRE_DE_LA_CALLE=?,";
+		if(user.getNumero()!=null)query+="NUMERO=?,";
+		if(user.getBloque()!=null)query+="BLOQUE=?,";
+		if(user.getPortal()!=null)query+="PORTAL=?,";
+		if(user.getPlanta()!=null)query+="PLANTA=?,";
+		if(user.getPlanta_letra()!=null)query+="PLANTA_LETRA=?,";
+		if(user.getCodigo_postal()!=null)query+="CODIGO_POSTAL=?,";
+		if(user.getMunicipio()!=null)query+="MUNICIPIO=?,";
+		if(user.getProvincia()!=null)query+="PROVINCIA=?,";
+		if(user.getPais_nombre()!=null)query+="PAIS_NOMBRE=?,";
+		if(user.getCodigo_pais()!=null)query+="CODIGO_PAIS=?,";
+		
+		if(query.endsWith(",")) query=query.substring(0, query.length()-1);
+		
+		
+		query+=" WHERE CODIGO_USUARIO=?";
 		
 		
 		try 
 		{
 				preparedStatement = dataSource.getConnection()
-	                    .prepareStatement(query5);
+	                    .prepareStatement(query);
+				
+				int i=1;
 
-		        preparedStatement.setString(1,user.getNombre_1());
-		        preparedStatement.setString(2,user.getNombre_2());
-		        preparedStatement.setString(3,user.getApellidos_1());
-		        preparedStatement.setString(4,user.getApellidos_2());
-		        preparedStatement.setString(5,user.getFecha_nacimiento());
-		        preparedStatement.setString(6,user.getEdad());
-		        preparedStatement.setString(7,user.getSexo());
-		        preparedStatement.setString(8,user.getLugar_de_nacimiento());
-		        preparedStatement.setString(9,user.getProvincia_nacimiento());
-		        preparedStatement.setString(10,user.getDireccion_habitual());
-		        preparedStatement.setString(11,user.getTipo_de_via());
-		        preparedStatement.setString(12,user.getNombre_de_la_calle());
-		        preparedStatement.setString(13,user.getNumero());
-		        preparedStatement.setString(14,user.getBloque());
-		        preparedStatement.setString(15,user.getPortal());
-		        preparedStatement.setString(16,user.getPlanta());
-		        preparedStatement.setString(17,user.getPlanta_letra());
-		        preparedStatement.setString(18,user.getCodigo_postal());
-		        preparedStatement.setString(19,user.getMunicipio());
-		        preparedStatement.setString(20,user.getProvincia());
-		        preparedStatement.setString(21,user.getPais_nombre());
-		        preparedStatement.setString(22,user.getCodigo_pais());
-		        preparedStatement.setString(23,user.getCodigo_usuario());
+				if(user.getNombre_1()!=null) preparedStatement.setString(i++,user.getNombre_1());
+				if(user.getNombre_2()!=null) preparedStatement.setString(i++,user.getNombre_2());
+				if(user.getApellidos_1()!=null) preparedStatement.setString(i++,user.getApellidos_1());
+				if(user.getApellidos_2()!=null) preparedStatement.setString(i++,user.getApellidos_2());
+				if(user.getFecha_nacimiento()!=null) preparedStatement.setString(i++,user.getFecha_nacimiento());
+				if(user.getEdad()!=null) preparedStatement.setString(i++,user.getEdad());
+				if(user.getSexo()!=null) preparedStatement.setString(i++,user.getSexo());
+				if(user.getLugar_de_nacimiento()!=null) preparedStatement.setString(i++,user.getLugar_de_nacimiento());
+				if(user.getProvincia_nacimiento()!=null) preparedStatement.setString(i++,user.getProvincia_nacimiento());
+				if(user.getDireccion_habitual()!=null) preparedStatement.setString(i++,user.getDireccion_habitual());
+				if(user.getTipo_de_via()!=null) preparedStatement.setString(i++,user.getTipo_de_via());
+				if(user.getNombre_de_la_calle()!=null) preparedStatement.setString(i++,user.getNombre_de_la_calle());
+				if(user.getNumero()!=null) preparedStatement.setString(i++,user.getNumero());
+				if(user.getBloque()!=null) preparedStatement.setString(i++,user.getBloque());
+				if(user.getPortal()!=null) preparedStatement.setString(i++,user.getPortal());
+				if(user.getPlanta()!=null) preparedStatement.setString(i++,user.getPlanta());
+				if(user.getPlanta_letra()!=null) preparedStatement.setString(i++,user.getPlanta_letra());
+				if(user.getCodigo_postal()!=null) preparedStatement.setString(i++,user.getCodigo_postal());
+				if(user.getMunicipio()!=null) preparedStatement.setString(i++,user.getMunicipio());
+				if(user.getProvincia()!=null) preparedStatement.setString(i++,user.getProvincia());
+				if(user.getPais_nombre()!=null) preparedStatement.setString(i++,user.getPais_nombre());
+				if(user.getCodigo_pais()!=null) preparedStatement.setString(i++,user.getCodigo_pais());
+
+				preparedStatement.setString(i++,user.getCodigo_usuario());
+		        
 	            int afectedRows=preparedStatement.executeUpdate();
 	            
 	            if(afectedRows==0)
