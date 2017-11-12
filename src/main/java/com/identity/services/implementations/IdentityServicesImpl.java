@@ -121,22 +121,22 @@ public class IdentityServicesImpl
 	
 	}
 
-//	@POST
-//    @Path("/getUser")
-//	@Consumes("application/json")
-//	@Produces("application/json")
-//    public LoginResponse getUser(@Context ServletContext servletContext,User user)
-//	{
-//		LOG.info("*********LOG********** Entrada servicio getUser con entrada: "+user);
-//		
-//		ApplicationContext ctx =
-//                WebApplicationContextUtils.getWebApplicationContext(servletContext);
-//		IdentityDAO dao= ctx.getBean("identityDAO",IdentityDAO.class);
-//	
-//
-//	    return dao.getUser(user);
-//        
-//	}
+	@POST
+    @Path("/getUser")
+	@Consumes("application/json")
+	@Produces("application/json")
+    public LoginResponse getUser(@Context ServletContext servletContext,User user)
+	{
+		LOG.info("*********LOG********** Entrada servicio getUser con entrada: "+user);
+		
+		ApplicationContext ctx =
+                WebApplicationContextUtils.getWebApplicationContext(servletContext);
+		IdentityDAO dao= ctx.getBean("identityDAO",IdentityDAO.class);
+	
+
+	    return dao.getUser(user);
+        
+	}
 	
 	@POST
     @Path("/getUsers")
