@@ -150,7 +150,7 @@ public class IdentityServicesImpl
 		
 		if(userInfo==null || 
 		   userInfo.getCodigo_usuario()==null || 
-		   !userInfo.getCodigo_usuario().isEmpty())
+		   userInfo.getCodigo_usuario().isEmpty())
 		{
 //			throw new WebApplicationException();
 			//TODO Metemos usuario de pruebas para hacer tests de los serviocios, esto deberia ser una excepcion
