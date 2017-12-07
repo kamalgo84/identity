@@ -1,27 +1,25 @@
 package com.identity.services.dao;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.ServletContext;
-import javax.ws.rs.core.Context;
-
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.identity.services.dtos.Card;
+import com.identity.services.dtos.CardRequest;
+import com.identity.services.dtos.CardResponse;
 import com.identity.services.dtos.Company;
 import com.identity.services.dtos.CompanyResponse;
 import com.identity.services.dtos.Customer;
 import com.identity.services.dtos.LoginResponse;
 import com.identity.services.dtos.User;
+import com.identity.services.dtos.UserCardsResponse;
 import com.identity.services.dtos.UsersResponse;
-import com.identity.services.implementations.IdentityServicesImpl;
 import com.identity.utils.Constants;
 import com.identity.utils.Tools;
 import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
@@ -57,10 +55,123 @@ public class IdentityDAO {
 	@Autowired
 	private String query8;
 	
+	@Autowired
+	private String query9;
+	
+	@Autowired
+	private String query10;
+	
 	public BasicDataSource getDataSource() {return dataSource;}
 
 	public void setDataSource(BasicDataSource dataSource) {this.dataSource = dataSource;}
 
+	public UserCardsResponse getUserCards(String userId)
+	{
+
+		LOG.info("*********LOG********** Entrada servicio getUserCards con entrada: "+userId);
+	    
+		UserCardsResponse respuesta=new UserCardsResponse();
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet=null;
+		
+		try 
+		{
+	        preparedStatement = dataSource.getConnection()
+                    .prepareStatement(query10);
+
+	        preparedStatement.setString(1,userId);
+	        
+	        resultSet=preparedStatement.executeQuery();
+            
+            int cont=0;
+            while (resultSet!=null && resultSet.next()) 
+            {
+            	cont++;
+            	LOG.info("*********LOG********** Procesando registro: "+cont);
+            	
+            	Card card=new Card();
+            	card.setImageURI(resultSet.getString("URI"));
+            	card.setId(resultSet.getString("ID_PCARD"));
+            	
+            	respuesta.getCards().add(card);
+   			 
+            }
+            
+            preparedStatement.close();
+            
+    		return respuesta;
+	            
+		}
+		catch (SQLException e) 
+		{
+			respuesta.setSalida("Error SQL: "+e.getErrorCode()+"*********"+e.getMessage()+"*********"+e);
+			return respuesta;
+		}
+		catch (Exception ex) {
+
+			respuesta.setSalida("Error SQL: "+ex.getMessage()+"*********"+ex);
+			return respuesta;
+		}
+		
+
+	}
+	
+	public CardResponse getCard(CardRequest peticion, String userId)
+	{
+
+		LOG.info("*********LOG********** Entrada servicio getCard con entrada: "+peticion);
+	    
+		CardResponse respuesta=new CardResponse();
+		PreparedStatement preparedStatement = null;
+		ResultSet resultSet=null;
+		
+		try 
+		{
+	        preparedStatement = dataSource.getConnection()
+                    .prepareStatement(query9);
+
+	        preparedStatement.setString(1,userId);
+	        preparedStatement.setString(2,peticion.getId());
+	        
+	        resultSet=preparedStatement.executeQuery();
+            
+            
+            
+            int cont=0;
+            while (resultSet!=null && resultSet.next()) 
+            {
+            	cont++;
+            	LOG.info("*********LOG********** Procesando registro: "+cont);
+            	
+            	if(cont==1)
+            	{
+	            	Card card=new Card();
+	            	card.setImageURI(resultSet.getString("URI"));
+	            	card.setId(resultSet.getString("ID_PCARD"));
+	            	
+	            	respuesta.setCard(card);
+            	}
+   			 
+            }
+            
+            preparedStatement.close();
+            
+    		return respuesta;
+	            
+		}
+		catch (SQLException e) 
+		{
+			respuesta.setSalida("Error SQL: "+e.getErrorCode()+"*********"+e.getMessage()+"*********"+e);
+			return respuesta;
+		}
+		catch (Exception ex) {
+
+			respuesta.setSalida("Error SQL: "+ex.getMessage()+"*********"+ex);
+			return respuesta;
+		}
+		
+
+	}
 	public LoginResponse addUser(User user)
 	{
 	
@@ -155,20 +266,18 @@ public class IdentityDAO {
             
             
     		ArrayList<User> users=new ArrayList<User>();
-    		
-    		LOG.info("*********LOG**********"+resultSet.getFetchSize());
     		int cont=0;
     		 
             while (resultSet.next()) 
             {
-            	
-            	LOG.info("*********LOG********** Procesando registro: "+cont++);
+            	cont++;
+            	LOG.info("*********LOG********** Procesando registro: "+cont);
             	
             	User client=new User();
             	
-            	client.setCodigo_usuario(resultSet.getString("CODIGO_USUARIO"));
+            	client.setCodigo_usuario(resultSet.getString("USER_ID"));
             	client.setPassword(resultSet.getString("PASSWORD"));
-            	client.setType(resultSet.getString("TIPO"));
+            	client.setType(resultSet.getString("TYPE"));
             	            	
             	users.add(client);
             	

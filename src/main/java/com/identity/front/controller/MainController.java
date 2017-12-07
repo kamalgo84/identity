@@ -20,7 +20,6 @@ import com.identity.services.dtos.ErrorInfo;
 import com.identity.services.dtos.LoginResponse;
 import com.identity.services.dtos.RespuestaJSON;
 import com.identity.services.dtos.User;
-import com.identity.services.dtos.UsersResponse;
 import com.identity.utils.Constants;
 import com.identity.utils.Tools;
 
@@ -166,6 +165,7 @@ public class MainController {
 		
 			HttpSession userSession=request.getSession();
 			userSession.setAttribute(Constants.AUTHENTICATED, Boolean.TRUE);
+			userSession.setAttribute(Constants.USER_ID, user);
 			
 			respuestaDAO.getUsers().get(0).setPassword("****");
 			userSession.setAttribute(Constants.USER_INFO, respuestaDAO.getUsers().get(0));
