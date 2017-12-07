@@ -51,7 +51,7 @@ public class MainFilter implements Filter {
 
 		HttpServletRequest requestMod = ((HttpServletRequest) request);
 		HttpServletResponse responseMod = ((HttpServletResponse) response);
-		
+
 		if(requestMod.getRequestURI().contains("pcards") || requestMod.getRequestURI().contains("identity_app")||requestMod.getRequestURI().contains("services"))
 		{
 			LOG.info(""+requestMod.getRequestURI());
