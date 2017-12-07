@@ -1,6 +1,7 @@
 package com.identity.services.filters;
 
 import java.io.IOException;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 import javax.servlet.Filter;
@@ -15,13 +16,17 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.ws.rs.WebApplicationException;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.identity.services.dao.IdentityDAO;
 import com.identity.services.dtos.User;
 import com.identity.utils.Constants;
 
 public class MainFilter implements Filter {
 
+
+	private static final Logger LOG = Logger.getLogger(MainFilter.class);
 	
 	public String entorno;
 	
@@ -47,15 +52,16 @@ public class MainFilter implements Filter {
 		HttpServletRequest requestMod = ((HttpServletRequest) request);
 		HttpServletResponse responseMod = ((HttpServletResponse) response);
 		
-		
-		
-		if(requestMod.getRequestURI().contains("identity_app"))
+		if(requestMod.getRequestURI().contains("pcards") || requestMod.getRequestURI().contains("identity_app")||requestMod.getRequestURI().contains("services"))
 		{
-			//TODO meter control de sesión
-			System.out.println(""+requestMod.getRequestURI());
-			//System.out.println(""+requestMod.getRequestURL());
-			
+			LOG.info(""+requestMod.getRequestURI());
 			HttpSession userSession=requestMod.getSession();
+			
+			if((GregorianCalendar.getInstance().getTimeInMillis()-requestMod.getSession().getLastAccessedTime())>3600000)
+			{
+				userSession.invalidate();
+				responseMod.sendRedirect(this.entorno+"/timeout.html");
+			}
 			
 			if(userSession.getAttribute(Constants.AUTHENTICATED)==null || 
 			   userSession.getAttribute(Constants.AUTHENTICATED)==Boolean.FALSE)
@@ -68,10 +74,10 @@ public class MainFilter implements Filter {
 			}
 			else
 			{
+				User userInfo=(User)userSession.getAttribute(Constants.USER_INFO);
 				
 				if(requestMod.getRequestURI().equalsIgnoreCase("/identity_app/indexCompany.html"))
 				{
-					User userInfo=(User)userSession.getAttribute(Constants.USER_INFO);
 					
 					if(userInfo!=null && userInfo.getType()!=null && !userInfo.getType().isEmpty() && userInfo.getType().equalsIgnoreCase(Constants.USER_CUSTOMER))
 						responseMod.sendRedirect("/identity_app/indexCustomer.html");
@@ -83,7 +89,6 @@ public class MainFilter implements Filter {
 				
 				if(requestMod.getRequestURI().equalsIgnoreCase("/identity_app/indexCustomer.html"))
 				{
-					User userInfo=(User)userSession.getAttribute(Constants.USER_INFO);
 					
 					if(userInfo!=null && userInfo.getType()!=null && !userInfo.getType().isEmpty() && userInfo.getType().equalsIgnoreCase(Constants.USER_CUSTOMER))
 						chain.doFilter(request, response);

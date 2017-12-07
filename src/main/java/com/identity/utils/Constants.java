@@ -4,7 +4,7 @@ public class Constants {
 	
 	public static final String AUTHENTICATED="Autenticado";
 	
-	public static final String USER_INFO="InformacionUsuario";
+	public static final String USER_INFO="USER_INFO";
 	
 	public static final String USER_COMPANY="E";
 	
@@ -15,4 +15,6 @@ public class Constants {
 	public static final String SEXO_HOMBRE="H";
 	
 	public static final String SEXO_MUJER="M";
+	
+	public static final String USER_ID="USER_ID";
 }

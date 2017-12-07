@@ -1,21 +1,24 @@
 package com.identity.services.dtos;
 
+
+import java.util.ArrayList;
+
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
-public class CardResponse {
+public class UserCardsResponse {
 
-	public CardResponse() {
+	public UserCardsResponse() {
 		super();
+		this.cards=new ArrayList<Card>();
 	}
 	
-	private Card card;
+	private ArrayList<Card> cards;
 	private String salida;
-	public Card getCard() {
-		return card;
-	}
-	public void setCard(Card card) {
-		this.card = card;
+	
+	
+	public ArrayList<Card> getCards() {
+		return cards;
 	}
 	public String getSalida() {
 		return salida;
@@ -25,9 +28,8 @@ public class CardResponse {
 	}
 	@Override
 	public String toString() {
-		return "CardResponse [card=" + card + ", salida=" + salida + "]";
+		return "UserCardsResponse [cards=" + cards + ", salida=" + salida + "]";
 	}
-	
 	
 	
 	
