@@ -33,61 +33,7 @@ public class MainController {
 	IdentityDAO identityDAO;
 
 	
-	@RequestMapping(value = "/login2", method= RequestMethod.POST)
-	public ModelAndView showLogin(HttpServletRequest request, 
-							HttpServletResponse response,
-							@RequestParam(value="user", required = true) String user,
-							@RequestParam(value="password", required = true) String password
-	) 
-	{
-		
-		
-	    //ModelAndView mav = new ModelAndView("index.html");
-	   // mav.addObject("login", new Login());
-		
-//		final String cookieName = "IdentityCookie";
-//	    final String cookieValue = "398753470530";  // you could assign it some encoded value
-//	    final Boolean useSecureCookie = false;
-//	    final int expiryTime = 60 * 60 * 24;  // 24h in seconds
-//	    final String cookiePath = "/";
-//
-//	    Cookie cookie = new Cookie(cookieName, cookieValue);
-//
-//	    cookie.setSecure(useSecureCookie);  // determines whether the cookie should only be sent using a secure protocol, such as HTTPS or SSL
-//
-//	    cookie.setMaxAge(expiryTime);  // A negative value means that the cookie is not stored persistently and will be deleted when the Web browser exits. A zero value causes the cookie to be deleted.
-//
-//	    cookie.setPath(cookiePath);  // The cookie is visible to all the pages in the directory you specify, and all the pages in that directory's subdirectories
-//
-//	    response.addCookie(cookie);
-	    
-	    //Establecer cookie en plan manual
-	   // response.addHeader("set-cookie", "Cabecera=loko");
-		
-	    //mav.getModel().put("cookie", cookie);
-		
-//		ModelAndView mav=new ModelAndView("redirect:/identity_app/home");
-//	    return mav;
-		
-		
-				
-		password = Tools.generateMD5Signature("URTY2R56C"+password + "DJUHRTFDE");
-		
-		if(password.equals(map.get(user)))
-		{	
-		
-			HttpSession userSession=request.getSession();
-			userSession.setAttribute(Constants.AUTHENTICATED, Boolean.TRUE);
-		    
-			return new ModelAndView("redirect:/identity_app/home");
-		}
-		else
-		{
-			return new ModelAndView("redirect:/identity_app/home");
-		}
 
-	    
-	}
 	
 	
 	@RequestMapping(value = "/logout", method= RequestMethod.POST)
@@ -224,27 +170,7 @@ public class MainController {
 		
 	}
 	
-//	@RequestMapping(value = {"/identity_app/indexCompany.html","/identity_app/indexCustomer.html"}, method = RequestMethod.GET)
-//	public String indexCompany(HttpServletRequest request, HttpServletResponse response
-//	//,@ModelAttribute("login") Login login
-//	) 
-//	{
-//		
-//		HttpSession userSession=request.getSession();
-//		User userInfo=(User)userSession.getAttribute(Constants.USER_INFO);
-//		
-//		String maV="";
-//		
-//		if(userInfo!=null && userInfo.getType()!=null && !userInfo.getType().isEmpty() && userInfo.getType().equalsIgnoreCase(Constants.USER_CUSTOMER))
-//			maV="/identity_app/indexCustomer.html";
-//		else if(userInfo.getType().equalsIgnoreCase(Constants.USER_COMPANY))
-//			maV="/identity_app/indexCompany.html";
-//		else
-//			throw new WebApplicationException();
-//		
-//		 ModelAndView mav=new ModelAndView(maV);
-//		 return maV;
-//	}
+
 	
 	
 	@RequestMapping(value = "/identity_app/home", method = RequestMethod.GET)
@@ -268,5 +194,126 @@ public class MainController {
 		 ModelAndView mav=new ModelAndView(maV);
 		 return mav;
 	}
+	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public ModelAndView redirectHome(HttpServletRequest request, HttpServletResponse response
+	//,@ModelAttribute("login") Login login
+	) 
+	{
+		HttpSession userSession=request.getSession();
+		User userInfo=(User)userSession.getAttribute(Constants.USER_INFO);
+		
+		
+		if(userInfo!=null)
+			return new ModelAndView("redirect:/identity_app/home");
+		else
+			return new ModelAndView("redirect:/public_app/index.html");
+		
+		
+		
+		
+	}
+	
+//	@RequestMapping(value = "/public_app/index", method = RequestMethod.GET)
+//	public ModelAndView home(HttpServletRequest request, HttpServletResponse response
+//	//,@ModelAttribute("login") Login login
+//	) 
+//	{
+//		return new ModelAndView("/public_app/index.html");
+//	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@RequestMapping(value = "/login2", method= RequestMethod.POST)
+	public ModelAndView showLogin(HttpServletRequest request, 
+							HttpServletResponse response,
+							@RequestParam(value="user", required = true) String user,
+							@RequestParam(value="password", required = true) String password
+	) 
+	{
+		
+		
+	    //ModelAndView mav = new ModelAndView("index.html");
+	   // mav.addObject("login", new Login());
+		
+//		final String cookieName = "IdentityCookie";
+//	    final String cookieValue = "398753470530";  // you could assign it some encoded value
+//	    final Boolean useSecureCookie = false;
+//	    final int expiryTime = 60 * 60 * 24;  // 24h in seconds
+//	    final String cookiePath = "/";
+//
+//	    Cookie cookie = new Cookie(cookieName, cookieValue);
+//
+//	    cookie.setSecure(useSecureCookie);  // determines whether the cookie should only be sent using a secure protocol, such as HTTPS or SSL
+//
+//	    cookie.setMaxAge(expiryTime);  // A negative value means that the cookie is not stored persistently and will be deleted when the Web browser exits. A zero value causes the cookie to be deleted.
+//
+//	    cookie.setPath(cookiePath);  // The cookie is visible to all the pages in the directory you specify, and all the pages in that directory's subdirectories
+//
+//	    response.addCookie(cookie);
+	    
+	    //Establecer cookie en plan manual
+	   // response.addHeader("set-cookie", "Cabecera=loko");
+		
+	    //mav.getModel().put("cookie", cookie);
+		
+//		ModelAndView mav=new ModelAndView("redirect:/identity_app/home");
+//	    return mav;
+		
+		
+				
+		password = Tools.generateMD5Signature("URTY2R56C"+password + "DJUHRTFDE");
+		
+		if(password.equals(map.get(user)))
+		{	
+		
+			HttpSession userSession=request.getSession();
+			userSession.setAttribute(Constants.AUTHENTICATED, Boolean.TRUE);
+		    
+			return new ModelAndView("redirect:/identity_app/home");
+		}
+		else
+		{
+			return new ModelAndView("redirect:/identity_app/home");
+		}
+
+	    
+	}
+	
+	
+//	@RequestMapping(value = {"/identity_app/indexCompany.html","/identity_app/indexCustomer.html"}, method = RequestMethod.GET)
+//	public String indexCompany(HttpServletRequest request, HttpServletResponse response
+//	//,@ModelAttribute("login") Login login
+//	) 
+//	{
+//		
+//		HttpSession userSession=request.getSession();
+//		User userInfo=(User)userSession.getAttribute(Constants.USER_INFO);
+//		
+//		String maV="";
+//		
+//		if(userInfo!=null && userInfo.getType()!=null && !userInfo.getType().isEmpty() && userInfo.getType().equalsIgnoreCase(Constants.USER_CUSTOMER))
+//			maV="/identity_app/indexCustomer.html";
+//		else if(userInfo.getType().equalsIgnoreCase(Constants.USER_COMPANY))
+//			maV="/identity_app/indexCompany.html";
+//		else
+//			throw new WebApplicationException();
+//		
+//		 ModelAndView mav=new ModelAndView(maV);
+//		 return maV;
+//	}
   
 }

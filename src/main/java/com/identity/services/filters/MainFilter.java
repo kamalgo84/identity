@@ -60,7 +60,7 @@ public class MainFilter implements Filter {
 			if((GregorianCalendar.getInstance().getTimeInMillis()-requestMod.getSession().getLastAccessedTime())>3600000)
 			{
 				userSession.invalidate();
-				responseMod.sendRedirect(this.entorno+"/timeout.html");
+				responseMod.sendRedirect(this.entorno+"/public_app/timeout.html");
 			}
 			
 			if(userSession.getAttribute(Constants.AUTHENTICATED)==null || 
@@ -70,7 +70,7 @@ public class MainFilter implements Filter {
 //	            RequestDispatcher noPermited = request.getRequestDispatcher("/forbidden.html");
 //	            noPermited.forward(request, response);
 	            
-	            responseMod.sendRedirect(this.entorno+"/forbidden.html");
+	            responseMod.sendRedirect(this.entorno+"/public_app/forbidden.html");
 			}
 			else
 			{
