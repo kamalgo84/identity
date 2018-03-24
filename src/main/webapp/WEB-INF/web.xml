@@ -80,6 +80,14 @@
 			<param-value>com.identity.services.core.MainServices</param-value>
 		</init-param>
         <load-on-startup>1</load-on-startup>
+			<multipart-config>
+			   <!-- 10MB of files -->
+			   <max-file-size>10485760</max-file-size>
+			   <!-- 10KB of form data -->
+			   <max-request-size>10485760</max-request-size>
+			   <!-- Buffer to disk over 512KB -->
+			   <file-size-threshold>10485760</file-size-threshold>
+			</multipart-config>
     </servlet>
     
     <context-param>
@@ -102,6 +110,7 @@
 <!--         <url-pattern>/*</url-pattern> -->
 <!--     </servlet-mapping> -->
     
+
 
 
          

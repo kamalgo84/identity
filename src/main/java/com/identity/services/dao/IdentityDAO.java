@@ -6,11 +6,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sql.DataSource;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import com.identity.services.dtos.Card;
 import com.identity.services.dtos.CardRequest;
@@ -33,7 +35,7 @@ public class IdentityDAO {
 	private static final Logger LOG = Logger.getLogger(IdentityDAO.class);
 	
 //	@Autowired
-	private BasicDataSource dataSource;
+	private DataSource dataSource;
 	
 	@Autowired
 	private String query1;
@@ -74,9 +76,9 @@ public class IdentityDAO {
 	@Autowired
 	private String query13;
 	
-	public BasicDataSource getDataSource() {return dataSource;}
+	public DataSource getDataSource() {return dataSource;}
 
-	public void setDataSource(BasicDataSource dataSource) {this.dataSource = dataSource;}
+	public void setDataSource(DataSource dataSource) {this.dataSource = dataSource;}
 
 	public Response getPCards(Long userId)
 	{

@@ -3,12 +3,22 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:jaxrs="http://cxf.apache.org/jaxrs"
        xmlns:cxf="http://cxf.apache.org/core"
+       xmlns:aop="http://www.springframework.org/schema/aop" 
+	   xmlns:jee="http://www.springframework.org/schema/jee" 
+	   xmlns:tx="http://www.springframework.org/schema/tx"
+	   xmlns:task="http://www.springframework.org/schema/task"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
                         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
                         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
                         http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd
-                        http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd">
+                        http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd
+                        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+						http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.2.xsd
+						http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd
+						http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.2.xsd">
+                        
+    
  
     <context:component-scan base-package="com.identity" />
     
@@ -50,16 +60,23 @@
 	<bean name="identityDAO" id="identityDAO" class="com.identity.services.dao.IdentityDAO">
         <property name="dataSource" ref="dataSource"/>
     </bean>
+    
+	<jee:jndi-lookup id="dataSource" jndi-name="${jdbc.url}"/>
 	
-	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="${jdbc.driverClassName}"/>
-        <property name="url" value="${jdbc.url}"/>
-        <property name="username" value="${jdbc.username}"/>
-        <property name="password" value="${jdbc.password}"/>
-    </bean>
+<!-- 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource"> -->
+<!--         <property name="driverClassName" value="${jdbc.driverClassName}"/> -->
+<!--         <property name="url" value="${jdbc.url}"/> -->
+<!--         <property name="username" value="${jdbc.username}"/> -->
+<!--         <property name="password" value="${jdbc.password}"/> -->
+<!--         <property name="connectionCachingEnabled" value="true"/> -->
+<!--     </bean> -->
     
 <!-- 	classpath*:/META-INF/spring/*.properties -->
 	<context:property-placeholder location="classpath*:/identity.properties"/>
+	
+	<bean id="uploadPath" class="java.lang.String">
+    	<constructor-arg type="java.lang.String" value="${uploadPath}"/>
+    </bean>
 	
 	<bean id="query1" class="java.lang.String">
     	<constructor-arg type="java.lang.String" value="${query1}"/>
